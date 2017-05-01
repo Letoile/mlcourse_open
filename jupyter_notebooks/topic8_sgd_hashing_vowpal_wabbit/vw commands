@@ -1,0 +1,41 @@
+#обучаем модели
+
+vw -d stackoverflow_train.vw --oaa 10 --random_seed 17 -b 28 --ngram 1 --passes 1 -f stacktrain_model11.vw &&
+vw -d stackoverflow_train.vw --oaa 10 --random_seed 17 -b 28 --ngram 2 --passes 1 -f stacktrain_model12.vw &&
+vw -d stackoverflow_train.vw --oaa 10 --random_seed 17 -b 28 --ngram 3 --passes 1 -f stacktrain_model13.vw --save_resume &&
+
+vw -d stackoverflow_train.vw --oaa 10 --random_seed 17 -b 28 --ngram 1 --passes 3 -f stacktrain_model31.vw --save_resume --cache_file cache31.vw &&
+vw -d stackoverflow_train.vw --oaa 10 --random_seed 17 -b 28 --ngram 2 --passes 3 -f stacktrain_model32.vw --cache_file cache32.vw &&
+vw -d stackoverflow_train.vw --oaa 10 --random_seed 17 -b 28 --ngram 3 --passes 3 -f stacktrain_model33.vw --cache_file cache33.vw &&
+
+vw -d stackoverflow_train.vw --oaa 10 --random_seed 17 -b 28 --ngram 1 --passes 5 -f stacktrain_model51.vw --cache_file cache51.vw &&
+vw -d stackoverflow_train.vw --oaa 10 --random_seed 17 -b 28 --ngram 2 --passes 5 -f stacktrain_model52.vw --cache_file cache52.vw &&
+vw -d stackoverflow_train.vw --oaa 10 --random_seed 17 -b 28 --ngram 3 --passes 5 -f stacktrain_model53.vw --cache_file cache53.vw
+
+
+#проверяем на валидации - записываем результаты в файл
+
+vw -i stacktrain_model11.vw -t -d stackoverflow_valid.vw -p valid_1_1.txt &&
+vw -i stacktrain_model12.vw -t -d stackoverflow_valid.vw -p valid_1_2.txt &&
+vw -i stacktrain_model13.vw -t -d stackoverflow_valid.vw -p valid_1_3.txt &&
+vw -i stacktrain_model51.vw -t -d stackoverflow_valid.vw -p valid_5_1.txt &&
+vw -i stacktrain_model52.vw -t -d stackoverflow_valid.vw -p valid_5_2.txt &&
+vw -i stacktrain_model53.vw -t -d stackoverflow_valid.vw -p valid_5_3.txt &&
+vw -i stacktrain_model31.vw -t -d stackoverflow_valid.vw -p valid_3_1.txt &&
+vw -i stacktrain_model32.vw -t -d stackoverflow_valid.vw -p valid_3_2.txt &&
+vw -i stacktrain_model33.vw -t -d stackoverflow_valid.vw -p valid_3_3.txt
+
+#проверяем лучшую модель на тесте и пишем в файл
+vw -i stacktrain_model12.vw -t -d stackoverflow_test.vw -p test_1_2.txt
+
+Обучите VW с параметрами, подобранными на проверочной выборке, теперь на объединении обучающей и проверочной выборок. Посчитайте долю правильных ответов на тестовой выборке. 
+
+vw -d stackoverflow_uni.vw --oaa 10 --random_seed 17 -b 28 --ngram 2 --passes 1 -f stackuni_model.vw
+
+проверим на валид
+
+vw -i stackuni_model.vw -t -d stackoverflow_valid.vw -p valid_uni.txt
+
+и на тест (это нас и интересует)
+
+vw -i stackuni_model.vw -t -d stackoverflow_test.vw -p test_uni.txt
